@@ -1,0 +1,39 @@
+{
+    "name": "Scaled Export for iOS",
+    "description": "Makes assets exportable for iOS project depending on original Sketch project scale",
+    "author": "Igor Savelev",
+    "authorEmail": "igor9774@gmail.com",
+    "homepage": "https://github.com/leonspok/Scaled-Export-for-iOS",
+    "version": "1.0",
+    "compatibleVersion": 3,
+    "identifier": "com.leonspok.sketch.ScaledExport",
+    "commands": [{
+        "name": "@1x exportable",
+        "identifier": "make_exportable_1",
+        "shortcut": "ctrl 1",
+        "script": "make_exportable@1x.cocoascript"
+    },{
+        "name": "@2x exportable",
+        "identifier": "make_exportable_2",
+        "shortcut": "ctrl 2",
+        "script": "make_exportable@2x.cocoascript"
+    },{
+        "name": "@3x exportable",
+        "identifier": "make_exportable_3",
+        "shortcut": "ctrl 3",
+        "script": "make_exportable@3x.cocoascript"
+    },{
+        "name": "Auto scale exportable",
+        "identifier": "make_exportable_auto",
+        "shortcut": "ctrl 4",
+        "script": "make_exportable@auto_x.cocoascript"
+    }],
+    "menu": {
+        "items": [
+            "make_exportable_1",
+            "make_exportable_2",
+            "make_exportable_3",
+            "make_exportable_auto"
+        ]
+    }
+}

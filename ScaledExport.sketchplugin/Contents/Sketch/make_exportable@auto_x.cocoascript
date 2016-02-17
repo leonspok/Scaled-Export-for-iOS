@@ -1,0 +1,60 @@
+@import 'make_exportable.cocoascript'
+@import 'constants.cocoascript'
+
+function findParentArtboard(layer) {
+	if (layer == nil) { return nil }
+	
+	var lookingForParentArtboard = true
+	var localParent = layer
+	while (lookingForParentArtboard) {
+		localParent = [localParent parentGroup]
+		if ([localParent className] == "MSArtboardGroup") {
+			lookingForParentArtboard = false
+		}
+		else if ([localParent className] == "MSPage") {
+			lookingForParentArtboard = false
+		}
+	}
+	return localParent
+}
+
+function getDocumentScaleForLayer(layer) {
+	var artboardFrame = findParentArtboard(layer).frame();
+	var possibleScales = [1.0, 2.0, 3.0];
+	for (var i = 0; i < screensInPoints.length; i++) {
+		var currentScreen = screensInPoints[i];
+		for (var j = 0; j < possibleScales.length; j++) {
+			if (parseInt(artboardFrame.width()/possibleScales[j]) == screensInPoints[i].width &&
+				parseInt(artboardFrame.height()/possibleScales[j]) == screensInPoints[i].height) {
+				return possibleScales[j];
+			}
+		}
+	}
+	return 1;
+}
+
+var onRun = function(context) {
+	var selection = context.selection.copy();
+    var doc = context.document;
+    var currentPage = [doc currentPage];
+    doc.currentPage().deselectAllLayers();
+
+    var message = "";
+    if (selection != nil) {
+        for (var i = 0; i < selection.count(); i++) {
+            currentLayer = [selection objectAtIndex:i];
+            var scale = getDocumentScaleForLayer(currentLayer);
+            makeLayerExportable(currentLayer, scale, false);
+            message += "Layer ("+currentLayer.name()+") was made exportable for @"+parseInt(scale)+"x project\n";
+        }
+        NSThread.sleepForTimeInterval(0.5);
+        for (var i = 0; i < selection.count(); i++) {
+            currentLayer = [selection objectAtIndex:i];
+            currentLayer.select_byExpandingSelection(true, true);
+        }
+        var app = NSApplication.sharedApplication();
+        [app displayDialog:message withTitle:"We’re done"]; 
+    } else {
+        console.log("Empty selection");
+    }
+}

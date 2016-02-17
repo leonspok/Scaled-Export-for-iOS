@@ -1,0 +1,48 @@
+function makeAllExportable(context, documentScale) {
+	var selection = context.selection.copy();
+    var doc = context.document;
+    var currentPage = [doc currentPage];
+    doc.currentPage().deselectAllLayers();
+
+    if (selection != nil) {
+        for (var i = 0; i < selection.count(); i++) {
+            currentLayer = [selection objectAtIndex:i];
+            makeLayerExportable(currentLayer, documentScale, false);
+        }
+        NSThread.sleepForTimeInterval(0.5);
+        for (var i = 0; i < selection.count(); i++) {
+            currentLayer = [selection objectAtIndex:i];
+            currentLayer.select_byExpandingSelection(true, true);
+        }
+    } else {
+        console.log("Empty selection");
+    }
+}
+
+function makeLayerExportable(layer, documentScale, shouldWaitAndSelect) {
+	var floatDocumentScale = parseFloat(documentScale);
+	if (floatDocumentScale <= 0) {
+		return;
+	}
+
+	var sizes = [(1/floatDocumentScale), 
+    			 (2/floatDocumentScale), 
+    			 (3/floatDocumentScale)];
+    var suffixes = ["", "@2x", "@3x"];
+
+    var exportSizes = [[layer exportOptions] exportFormats];
+    while ([exportSizes count] > 0) { 
+        [[exportSizes firstObject] remove];
+    }
+    
+    for (var s = 0; s < sizes.length; s++) {
+        var size = [[layer exportOptions] addExportFormat];
+        [size setScale:(sizes[s]+"")];
+        [size setName:suffixes[s]];
+    }
+
+    if (shouldWaitAndSelect === true) {
+    	NSThread.sleepForTimeInterval(0.05);
+    	layer.select_byExpandingSelection(true, true);
+    }
+} 

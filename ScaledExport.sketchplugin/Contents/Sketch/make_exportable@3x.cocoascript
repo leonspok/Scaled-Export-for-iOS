@@ -1,0 +1,7 @@
+@import 'make_exportable.cocoascript'
+
+var onRun = function(context) {
+    makeAllExportable(context, 3.0);
+    var doc = context.document;
+    [doc showMessage:"Layers were made exportable for @3x project"];
+}
