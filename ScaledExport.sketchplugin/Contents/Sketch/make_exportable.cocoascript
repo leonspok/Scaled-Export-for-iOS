@@ -1,4 +1,5 @@
 function makeAllExportable(context, documentScale) {
+    log("SCALEDEXPORT");
 	var selection = context.selection.copy();
     var doc = context.document;
     var currentPage = [doc currentPage];
@@ -20,20 +21,18 @@ function makeAllExportable(context, documentScale) {
 }
 
 function makeLayerExportable(layer, documentScale, shouldWaitAndSelect) {
-	var floatDocumentScale = parseFloat(documentScale);
-	if (floatDocumentScale <= 0) {
-		return;
-	}
+    var floatDocumentScale = parseFloat(documentScale);
+    if (floatDocumentScale <= 0) {
+        return;
+    }
 
-	var sizes = [(1/floatDocumentScale), 
-    			 (2/floatDocumentScale), 
-    			 (3/floatDocumentScale)];
+    var sizes = [(1/floatDocumentScale), 
+                 (2/floatDocumentScale), 
+                 (3/floatDocumentScale)];
     var suffixes = ["", "@2x", "@3x"];
 
     var exportSizes = [[layer exportOptions] exportFormats];
-    while ([exportSizes count] > 0) { 
-        [[exportSizes firstObject] remove];
-    }
+    [[layer exportOptions] setExportFormats:[]];
     
     for (var s = 0; s < sizes.length; s++) {
         var size = [[layer exportOptions] addExportFormat];
@@ -42,7 +41,7 @@ function makeLayerExportable(layer, documentScale, shouldWaitAndSelect) {
     }
 
     if (shouldWaitAndSelect === true) {
-    	NSThread.sleepForTimeInterval(0.05);
-    	layer.select_byExpandingSelection(true, true);
+        NSThread.sleepForTimeInterval(0.05);
+        layer.select_byExpandingSelection(true, true);
     }
 } 
