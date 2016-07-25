@@ -6,7 +6,7 @@ Sketch plugin, which makes assets exportable for iOS project depending on origin
 
 ## How to install
 
-1. Download **ScaledExport.sketchplugin**
+1. Download [**ScaledExport.sketchplugin**](https://github.com/leonspok/Scaled-Export-for-iOS/releases/download/v1.0/ScaledExport.sketchplugin.zip)
 2. Open **Sketch.app**
 3. Open from menu **Plugins -> Manage Plugins...**
 4. Press on **Gear button** and select **Show Plugins Folder**
